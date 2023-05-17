@@ -6,8 +6,18 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(r => r.json())
       .then(data => {
 
+
 // this is creating variable, targeting the movie list as to where to place my pic nav bar
     let movieListNav = document.querySelector("#movie-list");
+
+// moved up variables from when I wanted just first movie details:
+// adding wached and blood variables 
+    let detailImage = document.querySelector("#detail-image")
+    let title = document.querySelector("#title")
+    let yearReleased = document.querySelector("#year-released")
+    let description = document.querySelector("#description")
+    let watchedButton = document.querySelector("#watched")
+    let bloodAmount = document.querySelector("#amount")
 
 // this creates the variable so when page loads all the details for F13 1 to show up on page by default  
     let firstJason = data[0]
@@ -18,25 +28,33 @@ data.forEach(movie => {
     let img = document.createElement("img");
         img.src = imageUrl;
 
+// creating click event
+img.addEventListener("click" , () => {
+    updateMovieDetails(movie)
+}) 
+
 // this appends aka adds it back into the nav bar once the image space and source are declared above   
 movieListNav.appendChild(img);
         });
    
-// this shows details of the first movie 
-    let detailImage = document.querySelector("#detail-image")
-    let title = document.querySelector("#title")
-    let yearReleased = document.querySelector("#year-released")
-    let description = document.querySelector("#description")
 
-// this is updating the firstJason detail with the info of first Jason 
-    detailImage.src = firstJason.image
-    title.textContent = firstJason.title
-    yearReleased.textContent = firstJason.year_released
-    description.textContent = firstJason.description
+// this was where I first added details of the first movie 
+// now it it's a function to update movie details 
+function updateMovieDetails(movie) {
+    detailImage.src = movie.image;
+    title.textContent = movie.title;
+    yearReleased.textContent = movie.year_released;
+    description.textContent = movie.description;
+    watchedButton.textContent = movie.watched ? "Watched" : "Unwatched";
+    bloodAmount.textContent = movie.blood_amount;
+}
 
-      })
-// this is so errors can be caught in the DOM console 
-      .catch(error => {
-        console.error("Error fetching movies:", error);
-      });
-  });
+// this adds friday 13th p1 as the default starting point 
+updateMovieDetails(firstJason);
+})
+
+// this is so my consol DOM will catch any errors to check 
+.catch(error => {
+console.error("Error fetching movies:", error);
+});
+});
